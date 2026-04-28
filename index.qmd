@@ -1,0 +1,17 @@
+---
+title: bayes-guide
+authors:
+  - name: Stefano Coretta
+    affiliation: University of Edinburgh
+    roles: writing
+    corresponding: true
+  - name: Joseph V. Casillas
+    affiliation: Rutgers University
+bibliography: references.bib
+editor:
+  markdown: 
+    wrap: sentence
+    canonical: true
+---
+
+## Introduction
