@@ -1,0 +1,21 @@
+---
+title: "mald"
+format: html
+---
+
+```{r}
+#| label: setup
+
+library(tidyverse)
+```
+
+The following is data from @tucker2019.
+Loading the `.Rda` file attaches the data as `dat`.
+
+```{r}
+#| label: dat
+
+load("data/tucker2019/MALD1_1_AllData.Rda")
+```
+
+## References

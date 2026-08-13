@@ -1,0 +1,18 @@
+title: Massive Auditory Lexical Decision 1.1
+author: Tucker, Benjamin V.
+date: 2021-05-07
+doi: https://doi.org/10.7939/r3-kh0r-r116
+url: https://ualberta.scholaris.ca/items/185f7ef1-79f8-4802-882b-699eb008b609
+license: CC BY-NC 4.0
+citation: |
+  @article{tucker2019,
+    title = {The {{Massive Auditory Lexical Decision}} ({{MALD}}) Database},
+    author = {Tucker, Benjamin V. and Brenner, Daniel and D., Kyle Danielson and Kelley, Matthew C. and Nenadi{\'c}, Filip and Sims, Michelle},
+    year = 2019,
+    journal = {Behavior Research Methods},
+    volume = {51},
+    number = {3},
+    pages = {1187--1204},
+    doi = {10.3758/s13428-018-1056-1}
+  }
+

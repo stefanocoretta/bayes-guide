@@ -11,6 +11,8 @@ format:
     comments:
       hypothesis: true
 
+bibliography: references.bib
+
 execute:
   freeze: true
 

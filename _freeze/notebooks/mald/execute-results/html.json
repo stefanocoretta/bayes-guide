@@ -1,0 +1,17 @@
+{
+  "hash": "d68e791053c04c7d02e0a93c4bddf09b",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"mald\"\nformat: html\n---\n\n\n::: {.cell}\n\n```{.r .cell-code .hidden}\n#| label: setup\n\nlibrary(tidyverse)\n```\n\n::: {.cell-output .cell-output-stderr .hidden}\n\n```\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.2.1     ✔ readr     2.2.0\n✔ forcats   1.0.1     ✔ stringr   1.6.0\n✔ ggplot2   4.0.3     ✔ tibble    3.3.1\n✔ lubridate 1.9.5     ✔ tidyr     1.3.2\n✔ purrr     1.2.2     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors\n```\n\n\n:::\n:::\n\n\nThe following is data from @tucker2019.\nLoading the `.Rda` file attaches the data as `dat`.\n\n\n::: {.cell}\n\n```{.r .cell-code .hidden}\n#| label: dat\n\nload(\"data/tucker2019/MALD1_1_AllData.Rda\")\n```\n:::\n\n\n## References\n",
+    "supporting": [
+      "mald_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
