@@ -15,3 +15,12 @@ editor:
 ---
 
 ## Introduction
+
+Bayesian analysis is increasingly becoming an established alternative to Null Hypothesis Significance Testing (NHST) within linguistics and language research XXX.
+More and more research papers using Bayesian methods are being published across different sub-disciplines and more and more tutorials on how to conduct Bayesian analyses with linguistic data are becoming available XXX.
+A variety of reasons behind the adoption of Bayesian inference can be put forward.
+Just to mention a couple, Bayesian estimation based on Markov chain Monte Carlo methods affords us with models of greater complexity than what can be generally be successfully fitted with maximum likelihood estimation (like in popular packages like lme4 and XXX), and there is now a greater appreciation of methods that allow for more nuanced inferences than what the NHST method as currently implemented allows us to do, especially in light of the conversations around the reliability of empirical results in the published literature XXX.
+
+While such quick adoption is very welcomed, much of the resources currently available have focussed on how to fit Bayesian models and considerably less attention has been given to the logic of inference after model fitting.
+In our experience, we have informally observed an approach we call the Bayesian Null Ritual XXX, where the full potential of posterior probability distributions is not harnessed and researchers still rely on binary decisions on whether an effect of interest "exists".
+In this paper, we provide linguists and language researchers with guidelines on how to use posteriors to make and communicate substantive inferences about their estimands of interest.
