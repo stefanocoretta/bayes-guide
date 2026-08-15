@@ -149,6 +149,17 @@ dat_f |>
 ## Data sample
 
 ```{r}
+#| label: pl-dens
+
+dat_sample |> 
+  distinct(Item, PhonLev) |> 
+  ggplot(aes(PhonLev)) +
+  geom_density() +
+  geom_rug(alpha = 0.1)
+```
+
+
+```{r}
 #| label: rt-pl-sample
 
 dat_sample |> 
@@ -203,17 +214,54 @@ rt_draws <- as_draws_df(rt_bm)
 rt_draws |> 
   ggplot(aes(`b_IsWordFALSE:PhonLev_logc`)) +
   stat_halfeye()
-
-rt_draws |> 
-  ggplot(aes(exp(`b_IsWordFALSE:PhonLev_logc`))) +
-  geom_vline(xintercept = 1) +
-  stat_halfeye()
 ```
+
+```{r}
+#| label: b-pl-cri
+
+quantile2(exp(rt_draws$b_PhonLev_logc)) |> round(2)
+quantile2(exp(rt_draws$b_PhonLev_logc + rt_draws$`b_IsWordFALSE:PhonLev_logc`)) |> round(2)
+```
+
 
 ```{r}
 #| label: rt-bm-cond
 
 conditional_effects(rt_bm, "PhonLev_logc:IsWord")
+```
+
+```{r}
+#| label: rt-epred
+
+grid <- expand_grid(
+  IsWord = factor(c("TRUE", "FALSE"), levels = c("TRUE", "FALSE")),
+  PhonLev_logc = seq(min(dat_sample$PhonLev_logc), max(dat_sample$PhonLev_logc), by = 0.01)
+)
+
+rt_epred <- epred_draws(
+  rt_bm,
+  grid,
+  re_formula = NA
+) |> 
+  mutate(
+    PhonLev_log = PhonLev_logc + mean(dat_sample$PhonLev_log),
+    PhonLev = exp(PhonLev_log)
+  )
+```
+
+```{r}
+#| label: epred-pl
+
+rt_epred |> 
+  group_by(.row, PhonLev, IsWord) |> 
+  summarise(
+    mean = mean(.epred),
+    lo = quantile2(.epred, probs = 0.025), hi = quantile2(.epred, probs = 0.975),
+    .groups = "drop"
+  ) |> 
+  ggplot(aes(PhonLev, mean)) +
+  geom_line(aes(colour = IsWord)) +
+  geom_ribbon(aes(ymin = lo, ymax = hi, fill = IsWord), alpha = 0.5)
 ```
 
 
