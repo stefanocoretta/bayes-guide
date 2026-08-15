@@ -10,6 +10,8 @@ library(tidyverse)
 theme_set(theme_light())
 
 library(brms)
+library(tidybayes)
+library(posterior)
 ```
 
 ## The data
@@ -33,11 +35,17 @@ We do some data transformation for later.
 
 dat <- dat |> 
   mutate(
-    RT_log = log(RT), PhonLev_log = log(PhonLev)
+    RT_log = log(RT), PhonLev_log = log(PhonLev),
+    IsWord = factor(IsWord, levels = c("TRUE", "FALSE"))
   )
 
 dat_f <- dat |> 
   filter(RT > 0)
+
+set.seed(3181)
+dat_sample <- dat_f |> 
+  filter(Subject %in% sample(unique(dat_f$Subject), 30)) |> 
+  slice_sample(n = 150, by = Subject)
 ```
 
 ## Descriptive summaries and plots
@@ -138,16 +146,75 @@ dat_f |>
   geom_smooth(method = "lm")
 ```
 
+## Data sample
+
 ```{r}
 #| label: rt-pl-sample
 
-set.seed(3175)
-dat_f |> 
-  slice_sample(n = 8000) |> 
+dat_sample |> 
   ggplot(aes(PhonLev_log, RT_log, colour = IsWord)) +
   geom_smooth(method = "lm")
 ```
 
+```{r}
+#| label: dat-s-summaries
+
+dat_sample |> distinct(Subject) |> count()
+dat_sample |> distinct(Item, IsWord) |> count(IsWord)
+dat_sample |> group_by(IsWord) |>
+  summarise(mean(RT), median(RT), sd(RT), min(RT), max(RT))
+dat_sample |> group_by(IsWord) |>
+  summarise(mean(PhonLev_log), median(PhonLev_log), sd(PhonLev_log), min(PhonLev_log), max(PhonLev_log))
+```
+## Modelling
+
+```{r}
+#| label: centre
+
+dat_sample <- dat_sample |> 
+  mutate(
+    PhonLev_logc = PhonLev_log - mean(PhonLev_log)
+  )
+```
+
+
+```{r}
+#| label: rt-bm
+
+rt_bm <- brm(
+  RT ~ IsWord * PhonLev_logc + (IsWord * PhonLev_logc | Subject),
+  family = lognormal,
+  data = dat_sample,
+  cores = 4,
+  threads = threading(2),
+  backend = "cmdstanr",
+  seed = 2743,
+  file = "data/cache/rt_bm"
+)
+
+fixef(rt_bm)
+```
+
+```{r}
+#| label: rt-bm-int
+
+rt_draws <- as_draws_df(rt_bm)
+
+rt_draws |> 
+  ggplot(aes(`b_IsWordFALSE:PhonLev_logc`)) +
+  stat_halfeye()
+
+rt_draws |> 
+  ggplot(aes(exp(`b_IsWordFALSE:PhonLev_logc`))) +
+  geom_vline(xintercept = 1) +
+  stat_halfeye()
+```
+
+```{r}
+#| label: rt-bm-cond
+
+conditional_effects(rt_bm, "PhonLev_logc:IsWord")
+```
 
 
 ## References
