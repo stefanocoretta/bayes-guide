@@ -8,6 +8,8 @@ format: html
 
 library(tidyverse)
 theme_set(theme_light())
+
+library(brms)
 ```
 
 ## The data
@@ -20,19 +22,36 @@ Loading the `.Rda` file attaches the data as `dat`.
 
 load("data/tucker2019/MALD1_1_AllData.Rda")
 
-as_tibble(dat)
+dat <- as_tibble(dat)
+dat
 ```
 
 We do some data transformation for later.
 
 ```{r}
-#| label: dat-2
+#| label: dat-transform
 
 dat <- dat |> 
   mutate(
     RT_log = log(RT), PhonLev_log = log(PhonLev)
   )
 
+dat_f <- dat |> 
+  filter(RT > 0)
+```
+
+## Descriptive summaries and plots
+
+```{r}
+#| label: participants
+
+dat |> 
+  distinct(Subject) |> 
+  count()
+
+dat |> 
+  count(IsWord) |> 
+  mutate(prop = round(proportions(n) * 100))
 ```
 
 Density plot of RTs for each participant and aggregated.
@@ -82,58 +101,53 @@ dat |>
   geom_rug(alpha = 0.1)
 ```
 
-Let's filter the data to drop all RTs that are 0 ms.
-
-```{r}
-#| label: dat-f
-
-dat_f <- dat |> 
-  filter(RT > 0)
-```
-
-We can get a few summary measures.
+Let's use the filtered data which drops all RTs that are 0 ms. We can get a few summary measures.
 
 ```{r}
 #| label: dat-f-summaries
 
 dat_f |> 
-  group_by(Handedness) |> 
+  group_by(IsWord) |> 
   summarise(
     mean(RT), median(RT), sd(RT), min(RT), max(RT)
   )
 
 ```
 
-We do some plotting of RTs and handedness (left, right) and mean phoneme-level Levenshtein distance (`PhonLev`, range 5-15).
-
 ```{r}
-#| label: rt-h
+#| label: rt-dens-isword
 
 dat_f |> 
-  ggplot(aes(RT_log, fill = Handedness)) +
-  geom_density(alpha = 0.5) +
-  xlim(6, 8) +
+  group_by(Subject) |> 
+  mutate(
+    RT_z = (RT - mean(RT)) / sd(RT)
+  ) |> 
+  ggplot(aes(RT_z)) +
+  geom_density(aes(group = Subject), colour = alpha("black", 0.1)) +
+  geom_density(colour = "red") +
+  geom_rug(alpha = 0.1) +
   facet_grid(vars(IsWord))
-
 ```
+
 
 ```{r}
 #| label: rt-pl
 
 dat_f |> 
-  filter(IsWord) |> 
-  ggplot(aes(PhonLev_log, RT_log)) +
+  ggplot(aes(PhonLev_log, RT_log, colour = IsWord)) +
   geom_smooth(method = "lm")
 ```
 
 ```{r}
-#| label: rt-pl-h
+#| label: rt-pl-sample
 
+set.seed(3175)
 dat_f |> 
-  ggplot(aes(PhonLev_log, RT_log, colour = Handedness)) +
-  geom_smooth(method = "lm") +
-  facet_grid(cols = vars(IsWord))
-
+  slice_sample(n = 8000) |> 
+  ggplot(aes(PhonLev_log, RT_log, colour = IsWord)) +
+  geom_smooth(method = "lm")
 ```
+
+
 
 ## References
