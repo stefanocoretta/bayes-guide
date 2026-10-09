@@ -123,8 +123,7 @@ dat_f |>
 ```
 
 ```{r}
-#| label: fig-rt-dens-isword
-#| fig-cap: "Reaction times from 30 participants by lexical status. The RTs are z-scored within participant."
+#| label: rt-dens-isword
 
 dat_f |> 
   group_by(Subject) |> 
@@ -142,13 +141,11 @@ dat_f |>
   labs(
     x = "RT (within-participant z-scores)"
   )
-
-ggsave("img/rt-dens-isword.png", width = 7, height = 4)
 ```
 
 
 ```{r}
-#| label: fig-rt-pl
+#| label: rt-pl
 
 dat_f |> 
   ggplot(aes(PhonLev_log, RT_log, colour = IsWord)) +
@@ -162,8 +159,6 @@ dat_f |>
     palette = "Dark2",
     labels = c("TRUE" = "Real", "FALSE" = "Pseudo")
   )
-
-ggsave("img/rt-pl.png", width = 7, height = 4)
 ```
 
 ## Data sample
@@ -185,6 +180,49 @@ dat_sample |>
 dat_sample |> 
   ggplot(aes(PhonLev_log, RT_log, colour = IsWord)) +
   geom_smooth(method = "lm")
+```
+
+```{r}
+#| label: fig-rt-dens-isword-s
+#| fig-cap: "Reaction times from 30 participants by lexical status. The RTs are z-scored within participant."
+
+dat_sample |> 
+  group_by(Subject) |> 
+  mutate(
+    RT_z = (RT - mean(RT)) / sd(RT)
+  ) |> 
+  ggplot(aes(RT_z)) +
+  geom_density(aes(group = Subject), colour = alpha("black", 0.05)) +
+  geom_density(colour = "red") +
+  geom_rug(alpha = 0.1) +
+  facet_grid(
+    vars(IsWord),
+    labeller = labeller(IsWord = c("TRUE" = "Real word", "FALSE" = "Pseudo-word"))
+  ) +
+  labs(
+    x = "RT (within-participant z-scores)"
+  )
+
+ggsave("img/rt-dens-isword-s.png", width = 7, height = 4)
+```
+
+```{r}
+#| label: fig-rt-pl-s
+
+dat_sample |> 
+  ggplot(aes(PhonLev_log, RT_log, colour = IsWord)) +
+  geom_smooth(method = "lm") +
+  labs(
+    x = "Levenshtein distance (logged)",
+    y = "RT (logged)",
+    colour = "Lexical\nstatus"
+  ) +
+  scale_color_brewer(
+    palette = "Dark2",
+    labels = c("TRUE" = "Real", "FALSE" = "Pseudo")
+  )
+
+ggsave("img/rt-pl-s.png", width = 7, height = 4)
 ```
 
 ```{r}

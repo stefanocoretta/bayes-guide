@@ -48,12 +48,16 @@ We have also filtered the reaction times data to include only positive values (w
 In the figure, RTs were z-scored within each participant.
 The two panels show densities of each individual participant (in black) and the overall density (in red).
 
-![Reaction times from 30 participants by lexical status (real and pseudo-words). The RTs are z-scored within participant. Within each panel, the overall density (in red) and each participant specific density (in black) are shown.](img/rt-dens-isword.png){#fig-rt-dens-isword fig-align="center"}
+![Reaction times from 30 participants by lexical status (real and pseudo-words). The RTs are z-scored within participant. Within each panel, the overall density (in red) and each participant specific density (in black) are shown.](img/rt-dens-isword-s.png){#fig-rt-dens-isword fig-align="center"}
 
 @fig-rt-pl shows two regression lines with 95% CIs of logged Levenshtein distance and logged RTs in real (green) and pseudo-words (orange).
 Overall, distance has a positive effect on RTs.
-The regression line is steeper in real than in pseudo-words, thus suggesting a stronger effect of distance in real than in pseudo-words.
+The regression line is somewhat steeper in real than in pseudo-words, thus suggesting a stronger effect of distance in real than in pseudo-words.
 
-![Linear relationship between logged Levenshtein distance and logged RTs (with 95% CIs), for real and pseudo-words.](img/rt-pl.png){#fig-rt-pl fig-align="center"}
+![Linear relationship between logged Levenshtein distance and logged RTs (with 95% CIs), for real and pseudo-words.](img/rt-pl-s.png){#fig-rt-pl fig-align="center"}
+
+We will address the following research question: *how does the effect of Levenshtein distance on reaction times differ depending on the lexical status of the target word?* To answer this question, we will fit a Bayesian regression model.
+
+### The model
 
 ## References
