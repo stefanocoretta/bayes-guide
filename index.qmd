@@ -29,6 +29,22 @@ In this paper, we provide linguists and language researchers with guidelines on 
 
 ## The Bayesian Null Ritual
 
+### 95% CrIs are not special
+
+Current NHST practice is preoccupied with 95% Confidence Intervals (and relatedly on $\alpha = 0.05$).
+This devotion continues despite the fact that both Fisher on the one hand and Neyman and Pearson on the other were against universal thresholds.
+For example, Fisher stated that "no scientific worker has a fixed level of significance at which from year to year, and in all circumstances, \[they\] reject hypotheses; \[they\] rather gives \[their\] mind to each particular case in the light of \[their\] evidence and \[their\] ideas" [@fisher1956, p 42; @maier2022].
+Even in Neyman and Pearson's work, a universal $\alpha$ level does not follow from the framework they propose.
+In fact, Neyman says "\[t\]he first demand of the mathematical theory is to deduce such test criteria as would ensure that the probability of committing an error of the first kind would equal (or approximately equal, or not exceed) a preassigned number $\alpha$, *such as* $\alpha = 0.05$ or $0.01$, etc." [@neyman1976, p. 161, emphasis our own; @hubbard2003].
+We can safely infer from the quote that those $\alpha$ values are merely suggestions, not mandated standards.
+Furthermore, Neyman and Pearson clearly argue that "\[t\]he use of these statistical tools \[i.e. the statistical significance $\alpha$ and the statistical power $\beta$ together with their respective Type I and Type II errors\] in any given case, in determining just how the balance should be struck, must be left to the investigator." In other words, the researcher should decide how to balance Type I and Type II error rates by setting $\alpha$ and $\beta$ values in each individual case.
+
+The loyalty of 95% as a standard threshold can now be seen, in our experience, in applied Bayesian statistics in linguistics, where it is common for researchers to focus on 95% Bayesian Credible Intervals (CrIs).
+Bayesian posterior probability distributions, the hall-mark of Bayesian inference, allow researches for a more nuanced understanding of parameter estimation.
+CrIs with different probability levels, such as 98, 80, 75 or 63, are as useful as a 95% CrI.
+Each tells us what range of values contains a certain proportion of probability mass of the posterior probability distribution.
+In this sense, there is no reason to prefer one probability level over another.
+
 ## A worked out example
 
 ### The data
@@ -61,3 +77,4 @@ We will address the following research question: *how does the effect of Levensh
 ### The model
 
 ## References
+
