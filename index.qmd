@@ -16,6 +16,16 @@ editor:
 
 ## Introduction
 
+```{r}
+#| label: setup
+#| include: false
+
+library(tidyverse)
+theme_set(theme_light())
+library(posterior)
+
+```
+
 Bayesian analysis is increasingly becoming an established alternative to Null Hypothesis Significance Testing (NHST) within linguistics and language research XXX.
 More and more research papers using Bayesian methods are being published across different sub-disciplines and more and more tutorials on how to conduct Bayesian analyses with linguistic data are becoming available XXX.
 A variety of reasons behind the adoption of Bayesian inference can be put forward.
@@ -44,6 +54,70 @@ Bayesian posterior probability distributions, the hall-mark of Bayesian inferenc
 CrIs with different probability levels, such as 98, 80, 75 or 63, are as useful as a 95% CrI.
 Each tells us what range of values contains a certain proportion of probability mass of the posterior probability distribution.
 In this sense, there is no reason to prefer one probability level over another.
+For example, imagine a posterior distribution like the one in @fig-cri-example. The *x*-axis is a (simulated) effect in log-odds of a variable *x* from a Bernoulli regression model of a binary outcome *y*, while the *y*-axis shows the density plot of the (simulated) draws of the effect.
+The posterior probability distribution of the effect of *x* has a mean of 0.4 and an SD of 0.35 (log-odds).
+@fig-cri-example includes coloured areas corresponding to the 60%, 80% and 95% CrIs of the posterior draws.
+@tbl-cri-example reports the mean, SD and the 50-60-70-80-95% CrI of the corresponding odds ratio (i.e. the log-odds values are exponentiated before calculating the summary measures).
+
+```{r}
+#| label: fig-cri-example
+#| fig-cap: ""
+#| echo: false
+
+set.seed(41956)
+x <- rnorm(4000, 0.2, 0.15)
+
+qs <- quantile(x, c(.025, .10, .2, .8, .90, .975))
+
+density(x) |>
+  with(tibble(x = x, y = y)) |>
+  mutate(
+    CI = case_when(
+      between(x, qs[3], qs[4]) ~ "60%",
+      between(x, qs[2], qs[5]) ~ "80%",
+      between(x, qs[1], qs[6]) ~ "95%",
+      .default = ">95%"
+    ),
+    CI = factor(CI, levels = c("60%", "80%", "95%", ">95%")),
+    group = consecutive_id(CI)
+  ) |>
+  ggplot(aes(x, y, fill = CI, group = group)) +
+  geom_area() +
+  scale_fill_manual(
+    values = c(
+      "95%"  = "#bdd7e7",
+      "80%"  = "#6baed6",
+      "60%"  = "#2171b5",
+      ">95%" = "grey90"
+    ),
+    breaks = c("60%", "80%", "95%")
+  ) +
+  labs(
+    x = "Effect (log-odds)",
+    y = "Density"
+  )
+```
+
+```{r}
+#| label: tbl-cri-example
+#| tbl-cap: ""
+#| echo: false
+
+tibble(x = exp(x)) |> 
+  summarise(
+    mean = mean(x) |> round(2),
+    sd = sd(x) |> round(2),
+    `95%` = paste0("[", paste(quantile2(x, c(0.025, 0.975)) |> round(2), collapse = ", "), "]"),
+    `80%` = paste0("[", paste(quantile2(x, c(0.1, 0.9)) |> round(2), collapse = ", "), "]"),
+    `70%` = paste0("[", paste(quantile2(x, c(0.15, 0.85)) |> round(2), collapse = ", "), "]"),
+    `60%` = paste0("[", paste(quantile2(x, c(0.2, 0.8)) |> round(2), collapse = ", "), "]"),
+    `50%` = paste0("[", paste(quantile2(x, c(0.25, 0.75)) |> round(2), collapse = ", "), "]")
+  )
+
+```
+
+For example, the 95% CrI of the odds ratio is 0.92-1.64, in other words there is a 95% probability that the change in probability is between 8% decrease to 64% increase relative to the baseline.
+That is quite a wide range of odds ratios
 
 ## A worked out example
 
@@ -77,4 +151,3 @@ We will address the following research question: *how does the effect of Levensh
 ### The model
 
 ## References
-
